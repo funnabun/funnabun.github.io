@@ -1,11 +1,95 @@
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>My First Website</title>
-</head>
-<body>
-  <h1>Hello, world!</h1>
-  <p>This site is live on GitHub Pages.</p>
-</body>
-</html>
+```jsx
+import { useState } from "react";
+import { motion } from "framer-motion";
+import Head from "next/head"; // if using Next.js (or react-helmet for CRA)
+
+const METHODS = [
+  { id: 1, title: "Freelancing Online", description: "Offer skills like writing, design, or coding for pay.", details: "Websites like Upwork and Fiverr let you connect with clients worldwide. Start small and scale." },
+  { id: 2, title: "Dropshipping", description: "Sell products without holding inventory.", details: "Use Shopify or WooCommerce with suppliers who ship directly to customers." },
+  { id: 3, title: "Affiliate Marketing", description: "Earn commissions by promoting products.", details: "Sign up for affiliate programs (Amazon, ClickBank). Share links in blogs or videos." },
+];
+
+export default function CommissionSite() {
+  const [search, setSearch] = useState("");
+  const [selected, setSelected] = useState(null);
+
+  const filtered = METHODS.filter((m) =>
+    m.title.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <div className="min-h-screen bg-black text-white">
+      {/* Metadata + Favicon */}
+      <Head>
+        <title>Richinomics</title>
+        <meta
+          name="description"
+          content="Commission-based guidance on money-making methods with Richinomics."
+        />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      {/* Header */}
+      <header className="p-6 text-center border-b border-gray-800">
+        <h1 className="text-4xl font-bold text-yellow-400">Richinomics</h1>
+        <p className="text-gray-400 mt-2">
+          Commission-based guidance on money-making methods
+        </p>
+      </header>
+
+      {/* Search */}
+      <div className="p-6 max-w-3xl mx-auto">
+        <input
+          type="text"
+          placeholder="Search methods..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full p-3 rounded-xl text-black"
+        />
+      </div>
+
+      {/* Methods */}
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+        {filtered.map((method) => (
+          <motion.div
+            key={method.id}
+            whileHover={{ scale: 1.05 }}
+            className="bg-gray-900 rounded-2xl p-6 shadow-lg cursor-pointer border border-transparent hover:border-yellow-400 hover:shadow-yellow-500/50"
+            onClick={() => setSelected(method)}
+          >
+            <h2 className="text-xl font-semibold text-yellow-400">{method.title}</h2>
+            <p className="text-gray-400 mt-2">{method.description}</p>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Modal */}
+      {selected && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-6">
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-gray-900 rounded-2xl p-8 max-w-lg w-full relative border border-yellow-400"
+          >
+            <button
+              className="absolute top-2 right-4 text-gray-400 hover:text-yellow-400"
+              onClick={() => setSelected(null)}
+            >
+              ✕
+            </button>
+            <h2 className="text-2xl font-bold mb-4 text-yellow-400">
+              {selected.title}
+            </h2>
+            <p>{selected.details}</p>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Footer */}
+      <footer className="p-6 text-center border-t border-gray-800 text-gray-500">
+        © {new Date().getFullYear()} Richinomics. All rights reserved.
+      </footer>
+    </div>
+  );
+}
+```
